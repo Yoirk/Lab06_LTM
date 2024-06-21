@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lbSoDuDoan = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtTen = new System.Windows.Forms.TextBox();
             this.txtSoDuDoan = new System.Windows.Forms.TextBox();
@@ -49,15 +49,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên người chơi :";
             // 
-            // label2
+            // lbSoDuDoan
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 69);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 16);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Số dự đoán :";
+            this.lbSoDuDoan.AutoSize = true;
+            this.lbSoDuDoan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSoDuDoan.Location = new System.Drawing.Point(12, 69);
+            this.lbSoDuDoan.Name = "lbSoDuDoan";
+            this.lbSoDuDoan.Size = new System.Drawing.Size(82, 16);
+            this.lbSoDuDoan.TabIndex = 0;
+            this.lbSoDuDoan.Text = "Số dự đoán :";
             // 
             // label3
             // 
@@ -65,9 +65,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(12, 167);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(133, 16);
+            this.label3.Size = new System.Drawing.Size(79, 16);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Thông báo từ server :";
+            this.label3.Text = "Thông báo :";
             // 
             // txtTen
             // 
@@ -94,7 +94,7 @@
             // btnGui
             // 
             this.btnGui.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGui.Location = new System.Drawing.Point(404, 112);
+            this.btnGui.Location = new System.Drawing.Point(15, 112);
             this.btnGui.Name = "btnGui";
             this.btnGui.Size = new System.Drawing.Size(119, 43);
             this.btnGui.TabIndex = 3;
@@ -104,7 +104,7 @@
             // btnTuDong
             // 
             this.btnTuDong.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTuDong.Location = new System.Drawing.Point(266, 112);
+            this.btnTuDong.Location = new System.Drawing.Point(153, 112);
             this.btnTuDong.Name = "btnTuDong";
             this.btnTuDong.Size = new System.Drawing.Size(119, 43);
             this.btnTuDong.TabIndex = 3;
@@ -114,12 +114,13 @@
             // btnKetNoi
             // 
             this.btnKetNoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnKetNoi.Location = new System.Drawing.Point(129, 112);
+            this.btnKetNoi.Location = new System.Drawing.Point(404, 112);
             this.btnKetNoi.Name = "btnKetNoi";
             this.btnKetNoi.Size = new System.Drawing.Size(119, 43);
             this.btnKetNoi.TabIndex = 3;
             this.btnKetNoi.Text = "Kết nối server";
             this.btnKetNoi.UseVisualStyleBackColor = true;
+            this.btnKetNoi.Click += new System.EventHandler(this.btnKetNoi_Click);
             // 
             // Client
             // 
@@ -133,10 +134,11 @@
             this.Controls.Add(this.txtSoDuDoan);
             this.Controls.Add(this.txtTen);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbSoDuDoan);
             this.Controls.Add(this.label1);
             this.Name = "Client";
             this.Text = "Client";
+            this.Load += new System.EventHandler(this.Client_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,7 +147,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbSoDuDoan;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtTen;
         private System.Windows.Forms.TextBox txtSoDuDoan;

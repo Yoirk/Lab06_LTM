@@ -98,6 +98,7 @@
             this.btnBatDau.TabIndex = 2;
             this.btnBatDau.Text = "Bắt đầu ";
             this.btnBatDau.UseVisualStyleBackColor = true;
+            this.btnBatDau.Click += new System.EventHandler(this.btnBatDau_Click);
             // 
             // txtSoNguoi
             // 
@@ -155,6 +156,8 @@
             this.Controls.Add(this.rtbTienTrinh);
             this.Name = "Server";
             this.Text = "Server";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Server_FormClosing);
+            this.Load += new System.EventHandler(this.Server_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
