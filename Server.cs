@@ -19,8 +19,10 @@ namespace Lab6
         private Socket server;
         private Thread listenThread;
         private int SoLuongClient = 0;
+        private int SoLuotChoi;
         private Random x = new Random();
         public string IP = "127.0.0.1";
+        private List<Socket> clientSockets = new List<Socket>();
 
         #endregion
 
@@ -35,11 +37,19 @@ namespace Lab6
             listenThread = new Thread(StartServer);
             listenThread.IsBackground = true;
             listenThread.Start();
+
+            //// Trước khi trò chơi được bắt đầu thì tạm ẩn đi các đối tượng sau
+            //lbSoLuotChoi.Visible = false;
+            //lbPhamVi.Visible = false;
+            //lbx.Visible = false;
+            //txtSoLuot.Visible = false;
+            //txtSoNho.Visible = false;
+            //txtSoLon.Visible = false;
         }
 
         private void Server_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Clean up the server socket
+            // Dọn sạch socket sau khi đóng form
             server?.Close();
             listenThread?.Abort();
         }
@@ -52,15 +62,37 @@ namespace Lab6
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             server.Bind(ipep);
             server.Listen(10);
-            UpdateGameProgress("Server started, waiting for clients...");
+            UpdateGameProgress("Server đã bắt đầu, đang chờ các client...");
 
             while (true)
             {
-                // Chấp nhận kết nối client socket
+                // Chấp nhận kết nối từ client
                 Socket clientSocket = server.Accept();
+                lock (clientSockets)
+                {
+                    clientSockets.Add(clientSocket);
+                }
+                Thread clientThread = new Thread(() => HandleClient(clientSocket));
+                clientThread.IsBackground = true;
+                clientThread.Start();
+            }
+        }
+
+        private void HandleClient(Socket clientSocket)
+        {
+            try
+            {
+                byte[] buffer = new byte[1024];
+                int received = clientSocket.Receive(buffer);
+                string clientName = Encoding.UTF8.GetString(buffer, 0, received);
+
                 SoLuongClient++;
-                UpdateGameProgress("Client connected.");
+                UpdateGameProgress($"Client ' {clientName} ' đã kết nối.");
                 UpdateNumClients();
+            }
+            catch (Exception ex)
+            {
+                UpdateGameProgress($"Error: {ex.Message}");
             }
         }
 
@@ -84,24 +116,103 @@ namespace Lab6
             txtSoNguoi.Text = SoLuongClient.ToString();
         }
 
+        private void StartRound()
+        {
+            if (SoLuotChoi > 0)
+            {
+                // Randomize the secret number and set the range
+                int secretNumber = x.Next(1, 101);
+                int lowerBound = Math.Max(1, secretNumber - 10);
+                int upperBound = Math.Min(100, secretNumber + 10);
+                txtSoNho.Text = lowerBound.ToString();
+                txtSoLon.Text = upperBound.ToString();
+
+                string roundMessage = $"Trò chơi đã bắt đầu! Đoán số từ {lowerBound} đến {upperBound}.";
+                UpdateGameProgress(roundMessage);
+
+                //lbSoLuotChoi.Visible = true;
+                //lbPhamVi.Visible = true;
+                //lbx.Visible = true;
+                //txtSoLuot.Visible = true;
+                //txtSoNho.Visible = true;
+                //txtSoLon.Visible = true;
+                btnBatDau.Visible = false;
+
+                lock (clientSockets)
+                {
+                    foreach (Socket clientSocket in clientSockets)
+                    {
+                        if (clientSocket.Connected)
+                        {
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(roundMessage);
+                            clientSocket.Send(messageBuffer);
+                        }
+                    }
+                }
+
+                Countdown(10, "Round starting in {0} seconds...");
+                SoLuotChoi--;
+                txtSoLuot.Text = SoLuotChoi.ToString();
+            }
+            else
+            {
+                string gameOverMessage = "Trò chơi kết thúc!";
+                lock (clientSockets)
+                {
+                    foreach (Socket clientSocket in clientSockets)
+                    {
+                        if (clientSocket.Connected)
+                        {
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(gameOverMessage);
+                            clientSocket.Send(messageBuffer);
+                        }
+                    }
+                }
+                UpdateGameProgress(gameOverMessage);
+            }
+        }
+
+        private void Countdown(int seconds, string message)
+        {
+            for (int i = seconds; i > 0; i--)
+            {
+                string countdownMessage = string.Format(message, i);
+                lock (clientSockets)
+                {
+                    foreach (Socket clientSocket in clientSockets)
+                    {
+                        if (clientSocket.Connected)
+                        {
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(countdownMessage);
+                            clientSocket.Send(messageBuffer);
+                        }
+                    }
+                }
+                UpdateGameProgress(countdownMessage);
+                Thread.Sleep(1000);
+            }
+
+            StartRound();
+        }
+
         #endregion
 
         #region Event
 
         private void btnBatDau_Click(object sender, EventArgs e)
         {
-            // Random số lượt chơi (tối thiểu là 5)
-            int numRounds = x.Next(5, 11);
-            txtSoLuot.Text = numRounds.ToString();
+            if (SoLuongClient >= 2) // Kiểm tra xem có từ 2 người chơi trở lên hay chưa
+            {
+                // Random số lượt chơi (tối thiểu là 5)
+                SoLuotChoi = x.Next(5, 11);
+                txtSoLuot.Text = SoLuotChoi.ToString();
 
-            // Random số x bí mật và hiển thị phạm vi
-            int secretNumber = x.Next(1, 101);
-            int lowerBound = Math.Max(1, secretNumber - 10);
-            int upperBound = Math.Min(100, secretNumber + 10);
-            txtSoNho.Text = lowerBound.ToString();
-            txtSoLon.Text = upperBound.ToString();
-
-            btnBatDau.Visible = false;
+                StartRound();
+            }
+            else
+            {
+                MessageBox.Show("Chưa thể bắt đầu trò chơi", "Thông báo");
+            }  
         }
 
         #endregion

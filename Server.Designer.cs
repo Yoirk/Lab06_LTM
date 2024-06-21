@@ -30,14 +30,14 @@
         {
             this.rtbTienTrinh = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbPhamVi = new System.Windows.Forms.Label();
+            this.lbSoLuotChoi = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnBatDau = new System.Windows.Forms.Button();
             this.txtSoNguoi = new System.Windows.Forms.TextBox();
             this.txtSoLuot = new System.Windows.Forms.TextBox();
             this.txtSoNho = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lbx = new System.Windows.Forms.Label();
             this.txtSoLon = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -59,25 +59,25 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Tiến trình trò chơi :";
             // 
-            // label3
+            // lbPhamVi
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(10, 145);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(124, 16);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Phạm vi số cần tìm :";
+            this.lbPhamVi.AutoSize = true;
+            this.lbPhamVi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPhamVi.Location = new System.Drawing.Point(10, 145);
+            this.lbPhamVi.Name = "lbPhamVi";
+            this.lbPhamVi.Size = new System.Drawing.Size(124, 16);
+            this.lbPhamVi.TabIndex = 1;
+            this.lbPhamVi.Text = "Phạm vi số cần tìm :";
             // 
-            // label4
+            // lbSoLuotChoi
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 92);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(82, 16);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Số lượt chơi :";
+            this.lbSoLuotChoi.AutoSize = true;
+            this.lbSoLuotChoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSoLuotChoi.Location = new System.Drawing.Point(12, 92);
+            this.lbSoLuotChoi.Name = "lbSoLuotChoi";
+            this.lbSoLuotChoi.Size = new System.Drawing.Size(82, 16);
+            this.lbSoLuotChoi.TabIndex = 1;
+            this.lbSoLuotChoi.Text = "Số lượt chơi :";
             // 
             // label5
             // 
@@ -121,15 +121,15 @@
             this.txtSoNho.Size = new System.Drawing.Size(84, 20);
             this.txtSoNho.TabIndex = 3;
             // 
-            // label2
+            // lbx
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(251, 145);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(33, 16);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "< x <";
+            this.lbx.AutoSize = true;
+            this.lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbx.Location = new System.Drawing.Point(251, 145);
+            this.lbx.Name = "lbx";
+            this.lbx.Size = new System.Drawing.Size(33, 16);
+            this.lbx.TabIndex = 1;
+            this.lbx.Text = "< x <";
             // 
             // txtSoLon
             // 
@@ -149,9 +149,9 @@
             this.Controls.Add(this.txtSoNguoi);
             this.Controls.Add(this.btnBatDau);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lbSoLuotChoi);
+            this.Controls.Add(this.lbx);
+            this.Controls.Add(this.lbPhamVi);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.rtbTienTrinh);
             this.Name = "Server";
@@ -167,14 +167,14 @@
 
         private System.Windows.Forms.RichTextBox rtbTienTrinh;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbPhamVi;
+        private System.Windows.Forms.Label lbSoLuotChoi;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnBatDau;
         private System.Windows.Forms.TextBox txtSoNguoi;
         private System.Windows.Forms.TextBox txtSoLuot;
         private System.Windows.Forms.TextBox txtSoNho;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbx;
         private System.Windows.Forms.TextBox txtSoLon;
     }
 }
