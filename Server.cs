@@ -129,6 +129,7 @@ namespace Lab6
 
 
 
+                
                 //int secretNumber = x.Next(1, 101);
                 //int lowerBound = Math.Max(1, secretNumber - 10);
                 //int upperBound = Math.Min(100, secretNumber + 10);
@@ -213,7 +214,6 @@ namespace Lab6
         {
             if (SoLuongClient >= 2 && SoLuongClient == Int32.Parse(txtSoNguoi.Text.Trim())) // Kiểm tra xem có từ 2 người chơi trở lên hay chưa và đủ số người chơi hay chưa 
             {
-
                 SoLuotChoi = Int32.Parse(txtSoLuot.Text.Trim());
                 // if (SoLuotChoi>=5) //số lượt chơi (tối thiểu là 5)
                 StartRound();
