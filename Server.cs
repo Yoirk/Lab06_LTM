@@ -29,10 +29,12 @@ namespace Lab6
         public Server()
         {
             InitializeComponent();
+
         }
 
         private void Server_Load(object sender, EventArgs e)
         {
+
             // Khởi chạy server thread
             listenThread = new Thread(StartServer);
             listenThread.IsBackground = true;
@@ -118,16 +120,22 @@ namespace Lab6
 
         private void StartRound()
         {
+
             if (SoLuotChoi > 0)
             {
-                // Randomize the secret number and set the range
-                int secretNumber = x.Next(1, 101);
+                // từ số được quy định bới server mà máy sẽ random ra 1 số trong khoảng đã định 
+
+                int secretNumber = x.Next(Int32.Parse(txtSoNho.Text.Trim()), Int32.Parse(txtSoLon.Text.Trim()));
+
+
+
+                /*int secretNumber = x.Next(1, 101);
                 int lowerBound = Math.Max(1, secretNumber - 10);
                 int upperBound = Math.Min(100, secretNumber + 10);
                 txtSoNho.Text = lowerBound.ToString();
-                txtSoLon.Text = upperBound.ToString();
+                txtSoLon.Text = upperBound.ToString();*/
 
-                string roundMessage = $"Trò chơi đã bắt đầu! Đoán số từ {lowerBound} đến {upperBound}.";
+                string roundMessage = $"Trò chơi đã bắt đầu! Đoán số từ {txtSoNho.Text} đến {txtSoLon.Text}.";
                 UpdateGameProgress(roundMessage);
 
                 //lbSoLuotChoi.Visible = true;
@@ -150,9 +158,11 @@ namespace Lab6
                     }
                 }
 
-                Countdown(10, "Round starting in {0} seconds...");
-                SoLuotChoi--;
-                txtSoLuot.Text = SoLuotChoi.ToString();
+                Countdown(3, "Round starting in {0} seconds...");
+
+
+                StartRound();
+                //txtSoLuot.Text = SoLuotChoi.ToString();
             }
             else
             {
@@ -191,8 +201,8 @@ namespace Lab6
                 UpdateGameProgress(countdownMessage);
                 Thread.Sleep(1000);
             }
+            SoLuotChoi--;
 
-            StartRound();
         }
 
         #endregion
@@ -201,18 +211,17 @@ namespace Lab6
 
         private void btnBatDau_Click(object sender, EventArgs e)
         {
-            if (SoLuongClient >= 2) // Kiểm tra xem có từ 2 người chơi trở lên hay chưa
+            if (SoLuongClient >= 2 && SoLuongClient == Int32.Parse(txtSoNguoi.Text.Trim())) // Kiểm tra xem có từ 2 người chơi trở lên hay chưa và đủ số người chơi hay chưa 
             {
-                // Random số lượt chơi (tối thiểu là 5)
-                SoLuotChoi = x.Next(5, 11);
-                txtSoLuot.Text = SoLuotChoi.ToString();
 
+                SoLuotChoi = Int32.Parse(txtSoLuot.Text.Trim());
+                // if (SoLuotChoi>=5) //số lượt chơi (tối thiểu là 5)
                 StartRound();
             }
             else
             {
                 MessageBox.Show("Chưa thể bắt đầu trò chơi", "Thông báo");
-            }  
+            }
         }
 
         #endregion
