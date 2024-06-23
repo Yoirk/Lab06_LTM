@@ -129,11 +129,11 @@ namespace Lab6
 
 
 
-                /*int secretNumber = x.Next(1, 101);
-                int lowerBound = Math.Max(1, secretNumber - 10);
-                int upperBound = Math.Min(100, secretNumber + 10);
-                txtSoNho.Text = lowerBound.ToString();
-                txtSoLon.Text = upperBound.ToString();*/
+                //int secretNumber = x.Next(1, 101);
+                //int lowerBound = Math.Max(1, secretNumber - 10);
+                //int upperBound = Math.Min(100, secretNumber + 10);
+                //txtSoNho.Text = lowerBound.ToString();
+                //txtSoLon.Text = upperBound.ToString();
 
                 string roundMessage = $"Trò chơi đã bắt đầu! Đoán số từ {txtSoNho.Text} đến {txtSoLon.Text}.";
                 UpdateGameProgress(roundMessage);
