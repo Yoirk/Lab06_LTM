@@ -127,7 +127,7 @@ namespace Lab6
 
                 int secretNumber = x.Next(Int32.Parse(txtSoNho.Text.Trim()), Int32.Parse(txtSoLon.Text.Trim()));
 
-
+                UpdateGameProgress($"Số cần đóan là: { secretNumber.ToString()}");
 
                 
                 //int secretNumber = x.Next(1, 101);
@@ -204,6 +204,30 @@ namespace Lab6
             }
             SoLuotChoi--;
 
+        }
+
+
+
+        private void CheckNumber (Socket clientSocket, int secretnumber)
+        {
+            try
+            {
+                byte[] buffer = new byte[1024];
+                int received = clientSocket.Receive(buffer);
+                string number = Encoding.UTF8.GetString(buffer, 0, received);
+
+                if (Int32.Parse(number.Trim()) == secretnumber) 
+                {
+                    
+                }
+                
+                
+                
+            }
+            catch (Exception ex)
+            {
+                UpdateGameProgress($"Error: {ex.Message}");
+            }
         }
 
         #endregion
