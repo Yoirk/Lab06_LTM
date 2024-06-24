@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -30,9 +31,9 @@ namespace Client
         private int minRange = 0;  // Set the appropriate minimum range
         private int maxRange = 100;
         private Random random = new Random();
-        int LuotChoi;
-        int low;
-        int high;
+        public int LuotChoi;
+        public int low;
+        public int high;
 
         #endregion
         public Client()
@@ -77,12 +78,16 @@ namespace Client
 
         private void ReceiveMessages() 
         {
-            int bytesRead = client.Receive(bufferClient);
-            if (bytesRead > 0)
+            try
             {
-                string receivedData = Encoding.UTF8.GetString(bufferClient, 0, bytesRead);
-                ProcessReceivedData(receivedData);
+                int bytesRead = client.Receive(bufferClient);
+                if (bytesRead > 0)
+                {
+                    string receivedData = Encoding.UTF8.GetString(bufferClient, 0, bytesRead);
+                    ProcessReceivedData(receivedData);
+                }
             }
+            catch { }
         }
 
         private void ProcessReceivedData(string data)
@@ -182,6 +187,12 @@ namespace Client
                 string dudoan= $"{txtTen.Text}/{txtSoDuDoan.Text}";
                 byte[] nameBuffer = Encoding.UTF8.GetBytes(dudoan);
                 client.Send(nameBuffer);
+                LuotChoi--;
+                if (LuotChoi <= 0)
+                {
+                    SaveHistoryToFile();
+                    this.Close();
+                }
             } 
         }
 
@@ -200,8 +211,18 @@ namespace Client
             // Send the guess to the server
             SendGuess(guess);
 
+            // Update the notification box
+            UpdateChatBox($"Tự động đoán: {guess}");
+
             // Sleep for a short period to avoid spamming the server too quickly
             LuotChoi--;
+
+            if (LuotChoi <= 0)
+            {
+                SaveHistoryToFile();
+                this.Close();
+            }
+
         }
 
         private void SendGuess(int guess)
@@ -213,11 +234,34 @@ namespace Client
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 client.Send(data);
 
-                // Update the notification box
-                UpdateChatBox($"Sent guess: {guess}");
+
             }
         }
 
+        private void SaveHistoryToFile()
+        {
+            string filePath = "history.txt";
+            try
+            {
+                if (rtbThongBao.InvokeRequired)
+                {
+                    rtbThongBao.Invoke(new Action(() =>
+                    {
+                        File.WriteAllText(filePath, rtbThongBao.Text);
+                        //this.Close();
+                    }));
+
+                }
+                else
+                {
+                    File.WriteAllText(filePath, rtbThongBao.Text);
+                    //this.Close();
+                }
+            }
+            catch
+            {
+            }
+        }
 
         private void btnTuDong_Click(object sender, EventArgs e)
         {

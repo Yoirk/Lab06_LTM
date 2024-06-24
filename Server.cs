@@ -238,7 +238,8 @@ namespace Lab6
 
             // Broadcast tới tất cả client
             string rangeMessage = $"{lowerBound}/{upperBound}/{SoLuotChoi}";
-            UpdateGameProgress(rangeMessage);
+            string range = $"Phạm vi dự đoán từ {lowerBound} đến {upperBound}";
+            UpdateGameProgress(range);
             Broadcast(rangeMessage);
         }
         #endregion
@@ -260,7 +261,7 @@ namespace Lab6
                 }
                 else
                 {
-                    if (Int32.Parse(txtSoLuot.Text) < 3)
+                    if (Int32.Parse(txtSoLuot.Text) > 5)
                     {
                         MessageBox.Show("Số lượt chơi tối thiểu là 3");
                     }
