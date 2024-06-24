@@ -26,6 +26,13 @@ namespace Client
         bool isWinner = false;
         private byte[] bufferClient = new byte[1024];
         private string name;
+        private List<int> triedNumbers = new List<int>();
+        private int minRange = 0;  // Set the appropriate minimum range
+        private int maxRange = 100;
+        private Random random = new Random();
+        int LuotChoi;
+        int low;
+        int high;
 
         #endregion
         public Client()
@@ -81,7 +88,15 @@ namespace Client
         private void ProcessReceivedData(string data)
         {
             string[] parts = data.Split('/');
-            if (parts.Length == 2)
+            if (parts.Length == 3)
+            {
+                low = Int32.Parse(parts[0]);
+                high = Int32.Parse(parts[1]);
+                LuotChoi = Int32.Parse(parts[2]);
+
+                UpdateChatBox($"Phạm vi số từ: {low} đến {high} ");
+            }
+            else if (parts.Length == 2)
             {
                 string username = parts[0];
                 string number = parts[1];
@@ -168,6 +183,47 @@ namespace Client
                 byte[] nameBuffer = Encoding.UTF8.GetBytes(dudoan);
                 client.Send(nameBuffer);
             } 
+        }
+
+        private void AutoPlay()
+        {
+            // Generate a random number within the range that hasn't been tried before
+            int guess;
+            do
+            {
+                guess = random.Next(low, high);
+            } while (triedNumbers.Contains(guess));
+
+            // Add the guess to the list of tried numbers
+            triedNumbers.Add(guess);
+
+            // Send the guess to the server
+            SendGuess(guess);
+
+            // Sleep for a short period to avoid spamming the server too quickly
+            LuotChoi--;
+        }
+
+        private void SendGuess(int guess)
+        {
+            if (client != null && client.Connected)
+            {
+                string username = txtTen.Text.Trim();
+                string message = $"{username}/{guess}";
+                byte[] data = Encoding.UTF8.GetBytes(message);
+                client.Send(data);
+
+                // Update the notification box
+                UpdateChatBox($"Sent guess: {guess}");
+            }
+        }
+
+
+        private void btnTuDong_Click(object sender, EventArgs e)
+        {
+            Thread Auto = new Thread(() => AutoPlay());
+            Auto.IsBackground = true;
+            Auto.Start(); 
         }
     }
 }

@@ -237,7 +237,7 @@ namespace Lab6
             txtSoLon.Text = upperBound.ToString();
 
             // Broadcast tới tất cả client
-            string rangeMessage = $"Phạm vi số cần tìm: {lowerBound} < x < {upperBound}";
+            string rangeMessage = $"{lowerBound}/{upperBound}/{SoLuotChoi}";
             UpdateGameProgress(rangeMessage);
             Broadcast(rangeMessage);
         }
