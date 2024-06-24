@@ -100,6 +100,7 @@ namespace Client
                 LuotChoi = Int32.Parse(parts[2]);
 
                 UpdateChatBox($"Phạm vi số từ: {low} đến {high} ");
+                Countdown();
             }
             else if (parts.Length == 2)
             {
@@ -119,7 +120,14 @@ namespace Client
                 UpdateChatBox(data);
             }
         }
-
+        private void Countdown()
+        {
+            for (int i = 10; i > 0; i--)
+            {
+                UpdateChatBox($"Bạn còn {i} giây");
+                Thread.Sleep(1000);
+            }
+        }
         private void UpdateChatBox(string message)
         {
             if (InvokeRequired)

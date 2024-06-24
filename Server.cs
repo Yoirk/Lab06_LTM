@@ -222,6 +222,7 @@ namespace Lab6
             txtSoNguoi.Text = SoLuongClient.ToString();
         }
 
+        
         private void CreateRandom()
         {
             randomNumbers.Clear();
@@ -241,6 +242,16 @@ namespace Lab6
             string range = $"Phạm vi dự đoán từ {lowerBound} đến {upperBound}";
             UpdateGameProgress(range);
             Broadcast(rangeMessage);
+            Countdown();
+        }
+        
+        private void Countdown()
+        {
+            for (int i = 10; i > 0; i--)
+            {
+                Thread.Sleep(1000);
+            }
+            CreateRandom();
         }
         #endregion
 
