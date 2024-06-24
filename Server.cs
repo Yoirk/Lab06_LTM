@@ -6,9 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -222,7 +224,26 @@ namespace Lab6
             txtSoNguoi.Text = SoLuongClient.ToString();
         }
 
-        
+        private void UpdateLow()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(UpdateLow));
+                return;
+            }
+            txtSoNho.Text = lowerBound.ToString();
+        }
+
+        private void UpdateHigh()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(UpdateHigh));
+                return;
+            }
+            txtSoLon.Text = upperBound.ToString();
+        }
+
         private void CreateRandom()
         {
             randomNumbers.Clear();
@@ -234,24 +255,68 @@ namespace Lab6
             upperBound = randomNumber + 10;
 
             // Cập nhật UI
-            txtSoNho.Text = lowerBound.ToString();
-            txtSoLon.Text = upperBound.ToString();
+            UpdateLow();
+            UpdateHigh();
 
             // Broadcast tới tất cả client
             string rangeMessage = $"{lowerBound}/{upperBound}/{SoLuotChoi}";
             string range = $"Phạm vi dự đoán từ {lowerBound} đến {upperBound}";
             UpdateGameProgress(range);
             Broadcast(rangeMessage);
+            SoLuotChoi--;
             Countdown();
         }
         
         private void Countdown()
         {
-            for (int i = 10; i > 0; i--)
+            Thread count = new Thread(() =>
             {
-                Thread.Sleep(1000);
+                for (int i = 10; i > 0; i--)
+                {
+                    Thread.Sleep(1000);
+                }
+                UpdateSoLuotChoiTextBox(SoLuotChoi);
+                if (SoLuotChoi == 0)
+                {
+                    MessageBox.Show("Hết game");
+                    string content = rtbTienTrinh.Text;
+
+                    // Gửi dữ liệu lên ctxt.io và nhận lại URL chia sẻ
+                    Task.Run(async () =>
+                    {
+                        string url = await UploadToCtxtIO(content);
+
+                    });
+
+                    this.Close();
+                }
+                else
+                {
+                    CreateRandom();
+                }
+            });
+            count.IsBackground = true;
+            count.Start();
+        }
+        async Task<string> UploadToCtxtIO(string text)
+        {
+            using (var client = new HttpClient())
+            {
+                var url = "https://ctxt.io/submit";
+                var data = new StringContent(text, Encoding.UTF8, "text/plain");
+
+                var response = await client.PostAsync(url, data);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return result; // Trả về URL của văn bản đã được chia sẻ
+                }
+                else
+                {
+                    return null; // Xử lý lỗi nếu cần
+                }
             }
-            CreateRandom();
         }
         #endregion
 
@@ -272,7 +337,7 @@ namespace Lab6
                 }
                 else
                 {
-                    if (Int32.Parse(txtSoLuot.Text) > 5)
+                    if (Int32.Parse(txtSoLuot.Text) < 5)
                     {
                         MessageBox.Show("Số lượt chơi tối thiểu là 3");
                     }
